@@ -51,7 +51,10 @@ function playGame(rounds = 5) {
     }
   }
 
+  let numOfRounds = rounds;
+
   while (rounds > 0) {
+    console.log(`Round ${numOfRounds - rounds + 1}:`);
     const computerSelection = getComputerChoice();
     const humanSelection = getHumanChoice();
 
