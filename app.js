@@ -1,14 +1,14 @@
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector(".display");
+const humanScoreDisplay = document.querySelector(".humanScore");
+const computerScoreDisplay = document.querySelector(".computerScore");
 
 var humanScore = 0;
 var computerScore = 0;
 
 buttons.forEach((button) => {
   button.addEventListener("click", (event) => {
-    const clickedButton = event.target;
-
-    const humanSelection = getHumanChoice(clickedButton.textContent);
+    const humanSelection = getHumanChoice(event.target.textContent);
     const computerSelection = getComputerChoice();
 
     playRound(humanSelection, computerSelection);
@@ -30,7 +30,7 @@ function playRound(humanChoice, computerChoice) {
   let roundResult = "";
 
   if (humanChoice === computerChoice) {
-    roundResult = "It's a tie! No winners here.";
+    roundResult = "It's a tie!";
   }
 
   switch (humanChoice) {
@@ -59,10 +59,14 @@ function playRound(humanChoice, computerChoice) {
         roundResult = "Scissors? Rock crushes them!";
         computerScore++;
       } else if (computerChoice === "paper") {
-        roundResult = "Paper gets cut. Guess you're just better!";
+        roundResult = "Paper gets cut. So clean!";
+        humanScore++;
       }
       break;
   }
 
+  // Update display with results and scores
   display.textContent = roundResult;
+  humanScoreDisplay.textContent = humanScore;
+  computerScoreDisplay.textContent = computerScore;
 }
