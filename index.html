@@ -17,10 +17,10 @@
   <body>
     <div>
       <p>You</p>
-      <p class="humanScore">0</p>
+      <p class="human-score">0</p>
     </div>
     <div>
-      <div class="display">First to get 5 points wins!</div>
+      <div class="round-result">First to get 5 points wins!</div>
       <div>
         <button class="game-button">Rock</button>
         <button class="game-button">Paper</button>
@@ -29,8 +29,11 @@
     </div>
     <div>
       <p>CPU</p>
-      <p class="computerScore">0</p>
+      <p class="computer-score">0</p>
     </div>
-    <button class="reset-button">Restart Game</button>
+    <dialog data-modal>
+      <p class="final-verdict">You...</p>
+      <button class="reset-button">Restart Game</button>
+    </dialog>
   </body>
 </html>
