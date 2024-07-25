@@ -1,5 +1,5 @@
 const gameButtons = document.querySelectorAll(".game-button");
-const resetButton = document.querySelector(".reset-button");
+const restartButton = document.querySelector(".restart-button");
 const modal = document.querySelector("dialog");
 const roundResultDisplay = document.querySelector(".round-result");
 const verdictDisplay = document.querySelector(".final-verdict");
@@ -18,7 +18,7 @@ gameButtons.forEach((button) => {
   });
 });
 
-resetButton.addEventListener("click", restartGame);
+restartButton.addEventListener("click", restartGame);
 
 /** Function */
 function getComputerChoice() {
