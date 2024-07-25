@@ -11,22 +11,26 @@
     <meta name="author" content="OMAR SAROUR" />
     <title>Rock Paper Scissors</title>
     <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div>
       <p>You</p>
       <p class="humanScore">0</p>
     </div>
-    <div class="display">First to get 5 points wins!</div>
     <div>
-      <button>Rock</button>
-      <button>Paper</button>
-      <button>Scissors</button>
+      <div class="display">First to get 5 points wins!</div>
+      <div>
+        <button class="game-button">Rock</button>
+        <button class="game-button">Paper</button>
+        <button class="game-button">Scissors</button>
+      </div>
     </div>
     <div>
       <p>CPU</p>
       <p class="computerScore">0</p>
     </div>
-    <script src="app.js"></script>
+    <button class="reset-button">Restart Game</button>
   </body>
 </html>
