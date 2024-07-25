@@ -1,4 +1,4 @@
-const buttons = document.querySelectorAll("button");
+const gameButtons = document.querySelectorAll(".game-button");
 const display = document.querySelector(".display");
 const humanScoreDisplay = document.querySelector(".humanScore");
 const computerScoreDisplay = document.querySelector(".computerScore");
@@ -6,9 +6,9 @@ const computerScoreDisplay = document.querySelector(".computerScore");
 var humanScore = 0;
 var computerScore = 0;
 
-buttons.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    const humanSelection = getHumanChoice(event.target.textContent);
+gameButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const humanSelection = getHumanChoice(button.textContent);
     const computerSelection = getComputerChoice();
 
     playRound(humanSelection, computerSelection);
@@ -69,4 +69,20 @@ function playRound(humanChoice, computerChoice) {
   display.textContent = roundResult;
   humanScoreDisplay.textContent = humanScore;
   computerScoreDisplay.textContent = computerScore;
+
+  if (humanScore === 5 || computerScore === 5) {
+    announceWinner();
+  }
+}
+
+function announceWinner() {
+  let finalResult = "";
+
+  if (humanScore === 5) {
+    finalResult = "Yay you won! But at what cost...";
+  } else if (computerScore === 5) {
+    finalResult = "Oh, you lost? Must be a special talent of yours!";
+  }
+
+  display.textContent = finalResult;
 }
