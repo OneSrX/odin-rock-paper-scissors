@@ -1,8 +1,10 @@
 const gameButtons = document.querySelectorAll(".game-button");
 const resetButton = document.querySelector(".reset-button");
-const display = document.querySelector(".display");
-const humanScoreDisplay = document.querySelector(".human-score-display");
-const computerScoreDisplay = document.querySelector(".computer-score-display");
+const modal = document.querySelector("dialog");
+const roundResultDisplay = document.querySelector(".round-result");
+const verdictDisplay = document.querySelector(".final-verdict");
+const humanScoreDisplay = document.querySelector(".human-score");
+const computerScoreDisplay = document.querySelector(".computer-score");
 
 var humanScore = 0;
 var computerScore = 0;
@@ -16,6 +18,9 @@ gameButtons.forEach((button) => {
   });
 });
 
+resetButton.addEventListener("click", restartGame);
+
+/** Function */
 function getComputerChoice() {
   const choices = ["rock", "paper", "scissors"];
   const randomIndex = Math.floor(Math.random() * choices.length);
@@ -67,27 +72,37 @@ function playRound(humanChoice, computerChoice) {
   }
 
   // Update display with results and scores
-  updateDisplays(roundResult, humanScore, computerScore);
+  roundResultDisplay.textContent = roundResult;
+  humanScoreDisplay.textContent = humanScore;
+  computerScoreDisplay.textContent = computerScore;
 
   if (humanScore === 5 || computerScore === 5) {
     announceWinner();
+    modal.showModal();
+    disableGameButtons(true);
   }
 }
 
-function updateDisplays(...args) {
-  display.textContent = args[0];
-  humanScoreDisplay.textContent = args[1];
-  computerScoreDisplay.textContent = args[2];
+function restartGame() {
+  humanScore = 0;
+  computerScore = 0;
+
+  verdictDisplay.textContent = "";
+  roundResultDisplay.textContent = "Choose your move to start the game";
+  humanScoreDisplay.textContent = humanScore;
+  computerScoreDisplay.textContent = computerScore;
+
+  modal.close();
+  disableGameButtons(false);
 }
 
 function announceWinner() {
-  let finalResult = "";
+  let message = humanScore > computerScore ? "Yay you won!" : "Oh, you lost?";
+  verdictDisplay.textContent = message;
+}
 
-  if (humanScore === 5) {
-    finalResult = "Yay you won! But at what cost...";
-  } else if (computerScore === 5) {
-    finalResult = "Oh, you lost? Must be a special talent of yours!";
-  }
-
-  display.textContent = finalResult;
+function disableGameButtons(bool) {
+  gameButtons.forEach((button) => {
+    button.disabled = bool;
+  });
 }
