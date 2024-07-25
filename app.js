@@ -1,24 +1,29 @@
 const gameButtons = document.querySelectorAll(".game-button");
 const restartButton = document.querySelector(".restart-button");
-const modal = document.querySelector("dialog");
+const dialog = document.querySelector("dialog");
 const roundResultDisplay = document.querySelector(".round-result");
 const verdictDisplay = document.querySelector(".final-verdict");
 const humanScoreDisplay = document.querySelector(".human-score");
 const computerScoreDisplay = document.querySelector(".computer-score");
 
-var humanScore = 0;
-var computerScore = 0;
+let humanScore = 0;
+let computerScore = 0;
 
 gameButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const humanSelection = getHumanChoice(button.textContent);
-    const computerSelection = getComputerChoice();
-
-    playRound(humanSelection, computerSelection);
+    playRound(getHumanChoice(button.id), getComputerChoice());
   });
 });
 
 restartButton.addEventListener("click", restartGame);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    if (dialog.open) {
+      event.preventDefault();
+    }
+  }
+});
 
 /** Function */
 function getComputerChoice() {
@@ -33,12 +38,9 @@ function getHumanChoice(choice) {
 }
 
 function playRound(humanChoice, computerChoice) {
+  if (humanChoice === computerChoice) return "It's a tie!";
+
   let roundResult = "";
-
-  if (humanChoice === computerChoice) {
-    roundResult = "It's a tie!";
-  }
-
   switch (humanChoice) {
     case "rock":
       if (computerChoice === "paper") {
@@ -78,31 +80,26 @@ function playRound(humanChoice, computerChoice) {
 
   if (humanScore === 5 || computerScore === 5) {
     announceWinner();
-    modal.showModal();
-    disableGameButtons(true);
+    dialog.showModal();
   }
 }
 
+// function that announces a winner
+function announceWinner() {
+  verdictDisplay.textContent =
+    humanScore > computerScore
+      ? "🎉🎉🎉 Yay, You won!"
+      : "❌❌❌ Boo, You lost!";
+}
+
+// function that restarts the game
 function restartGame() {
   humanScore = 0;
   computerScore = 0;
 
-  verdictDisplay.textContent = "";
   roundResultDisplay.textContent = "Choose your move to start the game";
   humanScoreDisplay.textContent = humanScore;
   computerScoreDisplay.textContent = computerScore;
 
-  modal.close();
-  disableGameButtons(false);
-}
-
-function announceWinner() {
-  let message = humanScore > computerScore ? "Yay you won!" : "Oh, you lost?";
-  verdictDisplay.textContent = message;
-}
-
-function disableGameButtons(bool) {
-  gameButtons.forEach((button) => {
-    button.disabled = bool;
-  });
+  dialog.close();
 }
