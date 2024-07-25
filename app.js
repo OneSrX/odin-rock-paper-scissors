@@ -1,7 +1,8 @@
 const gameButtons = document.querySelectorAll(".game-button");
+const resetButton = document.querySelector(".reset-button");
 const display = document.querySelector(".display");
-const humanScoreDisplay = document.querySelector(".humanScore");
-const computerScoreDisplay = document.querySelector(".computerScore");
+const humanScoreDisplay = document.querySelector(".human-score-display");
+const computerScoreDisplay = document.querySelector(".computer-score-display");
 
 var humanScore = 0;
 var computerScore = 0;
@@ -66,13 +67,17 @@ function playRound(humanChoice, computerChoice) {
   }
 
   // Update display with results and scores
-  display.textContent = roundResult;
-  humanScoreDisplay.textContent = humanScore;
-  computerScoreDisplay.textContent = computerScore;
+  updateDisplays(roundResult, humanScore, computerScore);
 
   if (humanScore === 5 || computerScore === 5) {
     announceWinner();
   }
+}
+
+function updateDisplays(...args) {
+  display.textContent = args[0];
+  humanScoreDisplay.textContent = args[1];
+  computerScoreDisplay.textContent = args[2];
 }
 
 function announceWinner() {
