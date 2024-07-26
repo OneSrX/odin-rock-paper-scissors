@@ -2,9 +2,9 @@ const gameButtons = document.querySelectorAll(".game-button");
 const restartButton = document.querySelector(".restart-button");
 const dialog = document.querySelector("dialog");
 const roundResultDisplay = document.querySelector(".round-result");
-const verdictDisplay = document.querySelector(".final-verdict");
-const humanScoreDisplay = document.querySelector(".human-score");
-const computerScoreDisplay = document.querySelector(".computer-score");
+const finalResultDisplay = document.querySelector(".final-result");
+const humanScoreDisplay = document.querySelector(".player-score.human");
+const computerScoreDisplay = document.querySelector(".player-score.computer");
 
 let humanScore = 0;
 let computerScore = 0;
@@ -17,14 +17,66 @@ gameButtons.forEach((button) => {
 
 restartButton.addEventListener("click", restartGame);
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    if (dialog.open) {
-      roundResultDisplay.textContent = "Please refresh the page to restart";
-      disableGameButtons();
-    }
+// Main game logic
+function playRound(humanChoice, computerChoice) {
+  if (humanChoice === computerChoice) {
+    updateRoundResultDisplay("It's a tie!");
+    return;
   }
-});
+
+  let roundResult = "";
+  switch (humanChoice) {
+    case "rock":
+      if (computerChoice === "paper") {
+        roundResult = "Rock is covered by Paper";
+        computerScore++;
+      } else if (computerChoice === "scissors") {
+        roundResult = "Rock crushes Scissors";
+        humanScore++;
+      }
+      break;
+
+    case "paper":
+      if (computerChoice === "rock") {
+        roundResult = "Paper covers Rock";
+        humanScore++;
+      } else if (computerChoice === "scissors") {
+        roundResult = "Paper is cut by Scissors";
+        computerScore++;
+      }
+      break;
+
+    case "scissors":
+      if (computerChoice === "rock") {
+        roundResult = "Scissors are crushed by Rock";
+        computerScore++;
+      } else if (computerChoice === "paper") {
+        roundResult = "Scissors cut Paper";
+        humanScore++;
+      }
+      break;
+  }
+
+  // Update display with results and scores
+  updateScoreDisplay();
+  updateRoundResultDisplay(roundResult);
+
+  if (humanScore === 5 || computerScore === 5) {
+    announceWinner();
+    showDialog();
+  }
+}
+
+// Restart the game
+function restartGame() {
+  humanScore = 0;
+  computerScore = 0;
+
+  updateScoreDisplay();
+  updateRoundResultDisplay("Good luck this time!");
+
+  dialog.close();
+}
 
 function getComputerChoice() {
   const choices = ["rock", "paper", "scissors"];
@@ -37,84 +89,28 @@ function getHumanChoice(choice) {
   return choice.toLowerCase();
 }
 
-// Main game logic
-function playRound(humanChoice, computerChoice) {
-  let roundResult = "";
-
-  if (humanChoice === computerChoice) {
-    roundResult = "It's a tie!";
-  } else {
-    switch (humanChoice) {
-      case "rock":
-        if (computerChoice === "paper") {
-          roundResult = "Rock? Paper covers it. Better luck next time!";
-          computerScore++;
-        } else if (computerChoice === "scissors") {
-          roundResult = "Rock beats scissors. Wow, so original!";
-          humanScore++;
-        }
-        break;
-
-      case "paper":
-        if (computerChoice === "rock") {
-          roundResult = "Paper covers rock. Classic win for you!";
-          humanScore++;
-        } else if (computerChoice === "scissors") {
-          roundResult = "Scissors cut paper. Nice choice, though!";
-          computerScore++;
-        }
-        break;
-
-      case "scissors":
-        if (computerChoice === "rock") {
-          roundResult = "Scissors? Rock crushes them!";
-          computerScore++;
-        } else if (computerChoice === "paper") {
-          roundResult = "Paper gets cut. So clean!";
-          humanScore++;
-        }
-        break;
-    }
-  }
-
-  // Update display with results and scores
-  updateScores();
-  roundResultDisplay.textContent = roundResult;
-
-  if (humanScore === 5 || computerScore === 5) {
-    announceWinner();
-    dialog.showModal();
-  }
-}
-
-// Update scores
-function updateScores() {
+function updateScoreDisplay() {
   humanScoreDisplay.textContent = humanScore;
   computerScoreDisplay.textContent = computerScore;
 }
 
-// Announce the winner
+function updateRoundResultDisplay(message) {
+  roundResultDisplay.textContent = message;
+}
+
 function announceWinner() {
-  verdictDisplay.textContent =
+  finalResultDisplay.textContent =
     humanScore > computerScore
-      ? "🎉🎉🎉 Yay, You won!"
-      : "❌❌❌ Boo, You lost!";
+      ? "🎉🎉🎉 Congrats! You won!"
+      : "❌❌❌ Too bad! You lost!";
 }
 
-// Disable game buttons
-function disableGameButtons() {
-  gameButtons.forEach((button) => {
-    button.disabled = true;
+// Show the dialog and prevent it from closing on Esc press
+function showDialog() {
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+    }
   });
-}
-
-// Restart the game
-function restartGame() {
-  roundResultDisplay.textContent = "Good luck this time!";
-
-  humanScore = 0;
-  computerScore = 0;
-  updateScores();
-
-  dialog.close();
+  dialog.showModal();
 }
