@@ -6,8 +6,6 @@ const resultText = document.querySelector(".result-text");
 const resultEmoji = document.querySelector(".result-emoji");
 const restartButton = document.querySelector(".restart-button");
 
-// const resultDisplay = document.querySelector(".result-display");
-
 let humanScore = 0;
 let computerScore = 0;
 
@@ -22,7 +20,7 @@ restartButton.addEventListener("click", restartGame);
 // Main game logic
 function playRound(humanChoice, computerChoice) {
   if (humanChoice === computerChoice) {
-    updateGameDisplay("It's a tie!");
+    updateGameDisplay("It's a draw! Try again.");
     return;
   }
 
@@ -75,7 +73,7 @@ function restartGame() {
   computerScore = 0;
 
   updateScoreDisplays();
-  updateGameDisplay("Good luck this time!");
+  updateGameDisplay("Make your move!");
 
   dialog.close();
 }
@@ -109,8 +107,8 @@ function updateGameDisplay(message) {
 }
 
 function announceWinner() {
-  const [winEmoji, winText] = ["🎉🎉🎉", "Congrats! You won!"];
-  const [loseEmoji, loseText] = ["❌❌❌", "Too bad! You lost!"];
+  const [winEmoji, winText] = ["🏆🏆🏆", "YOU WIN!"];
+  const [loseEmoji, loseText] = ["❌❌❌", "YOU LOSE!"];
 
   if (humanScore === 5) {
     resultEmoji.textContent = winEmoji;
