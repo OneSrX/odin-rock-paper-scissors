@@ -1,10 +1,12 @@
+const scoreDisplays = document.querySelectorAll(".player-score");
 const gameButtons = document.querySelectorAll(".game-button");
-const restartButton = document.querySelector(".restart-button");
+const gameDisplay = document.querySelector(".game-display");
 const dialog = document.querySelector("dialog");
-const roundResultDisplay = document.querySelector(".round-result");
-const finalResultDisplay = document.querySelector(".final-result");
-const humanScoreDisplay = document.querySelector(".player-score.human");
-const computerScoreDisplay = document.querySelector(".player-score.computer");
+const resultText = document.querySelector(".result-text");
+const resultEmoji = document.querySelector(".result-emoji");
+const restartButton = document.querySelector(".restart-button");
+
+// const resultDisplay = document.querySelector(".result-display");
 
 let humanScore = 0;
 let computerScore = 0;
@@ -20,7 +22,7 @@ restartButton.addEventListener("click", restartGame);
 // Main game logic
 function playRound(humanChoice, computerChoice) {
   if (humanChoice === computerChoice) {
-    updateRoundResultDisplay("It's a tie!");
+    updateGameDisplay("It's a tie!");
     return;
   }
 
@@ -58,8 +60,8 @@ function playRound(humanChoice, computerChoice) {
   }
 
   // Update display with results and scores
-  updateScoreDisplay();
-  updateRoundResultDisplay(roundResult);
+  updateScoreDisplays();
+  updateGameDisplay(roundResult);
 
   if (humanScore === 5 || computerScore === 5) {
     announceWinner();
@@ -72,8 +74,8 @@ function restartGame() {
   humanScore = 0;
   computerScore = 0;
 
-  updateScoreDisplay();
-  updateRoundResultDisplay("Good luck this time!");
+  updateScoreDisplays();
+  updateGameDisplay("Good luck this time!");
 
   dialog.close();
 }
@@ -89,20 +91,34 @@ function getHumanChoice(choice) {
   return choice.toLowerCase();
 }
 
-function updateScoreDisplay() {
-  humanScoreDisplay.textContent = humanScore;
-  computerScoreDisplay.textContent = computerScore;
+function updateScoreDisplays() {
+  scoreDisplays.forEach((display) => {
+    switch (display.id) {
+      case "human":
+        display.textContent = humanScore;
+        break;
+      case "computer":
+        display.textContent = computerScore;
+        break;
+    }
+  });
 }
 
-function updateRoundResultDisplay(message) {
-  roundResultDisplay.textContent = message;
+function updateGameDisplay(message) {
+  gameDisplay.textContent = message;
 }
 
 function announceWinner() {
-  finalResultDisplay.textContent =
-    humanScore > computerScore
-      ? "🎉🎉🎉 Congrats! You won!"
-      : "❌❌❌ Too bad! You lost!";
+  const [winEmoji, winText] = ["🎉🎉🎉", "Congrats! You won!"];
+  const [loseEmoji, loseText] = ["❌❌❌", "Too bad! You lost!"];
+
+  if (humanScore === 5) {
+    resultEmoji.textContent = winEmoji;
+    resultText.textContent = winText;
+  } else {
+    resultEmoji.textContent = loseEmoji;
+    resultText.textContent = loseText;
+  }
 }
 
 // Show the dialog and prevent it from closing on Esc press
